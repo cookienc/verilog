@@ -1,3 +1,63 @@
+module stimulus;
+    reg clk;
+    reg [3:0] a, b;
+	reg c_in;
+    wire [3:0] sum;
+	wire c_out;
+    csa_4 csa_tb (sum, c_out, a, b, c_in);
+    
+    initial
+    begin
+    
+    clk = 0;
+    a=4'b0000; //0으로 초기화
+    b=4'b0000;
+    end
+
+    always  #10 clk= ~clk; // 클럭이 10마다 바뀜
+    integer i,j;
+
+    always@(posedge clk)
+    begin
+
+	assign c_in = 0;
+
+    for(i=0; i<16; i = i+1)
+		begin
+		#10 a=i;
+		for(j=0 ;j<i; j = j+1)
+			begin
+				#10 b=j;
+			end
+		$monitor("Sum = %b C_out = %b, Input A = %b, B = %b, c_in = %b", sum, c_out, a, b, c_in);
+		end
+	end
+
+	
+    always@(i) //i=16일때 반복을 멈춤
+        begin
+        if(i == 16)
+          begin
+          $finish;
+          end
+        end
+
+ endmodule
+
+
+/*module stimulus;
+reg [63:0] a, b;
+reg 
+
+
+endmodule
+
+
+
+
+
+
+
 //64bit Carry Select Adder
 module csa_64(sum, c_out, a, b, c_in);
 
@@ -40,7 +100,7 @@ assign c_out = c[3];
 
 endmodule
 
-
+*/
 
 
 //4bit Carry Select Adder
@@ -58,10 +118,10 @@ wire c0, c1; //중간에 저장되는 캐리 값, MUX선택할때 쓰임
 fulladd_4 fa0(.sum(s0[3:0]), .c_out(c0), .a(a), .b(b), .c_in(1'b0));// carry가 0일 때 4bit fa
 fulladd_4 fa1(.sum(s1[3:0]), .c_out(c1), .a(a), .b(b), .c_in(1'b1));// carry가 1일 때 4bit fa
 
-mux2_to_1 m0(.out(sum[0]), .i0(a[0]), .i1(b[0]), .s(c_in)); //c_in에 따라서 bit 선택
-mux2_to_1 m1(.out(sum[1]), .i0(a[1]), .i1(b[1]), .s(c_in));
-mux2_to_1 m2(.out(sum[2]), .i0(a[2]), .i1(b[2]), .s(c_in));
-mux2_to_1 m3(.out(sum[3]), .i0(a[3]), .i1(b[3]), .s(c_in));
+mux2_to_1 m0(.out(sum[0]), .i0(s0[0]), .i1(s1[0]), .s(c_in)); //c_in에 따라서 sum 선택
+mux2_to_1 m1(.out(sum[1]), .i0(s0[1]), .i1(s1[1]), .s(c_in));
+mux2_to_1 m2(.out(sum[2]), .i0(s0[2]), .i1(s1[2]), .s(c_in));
+mux2_to_1 m3(.out(sum[3]), .i0(s0[3]), .i1(s1[3]), .s(c_in));
 
 mux2_to_1 m4(.out(c_out), .i0(c0), .i1(c1), .s(c_in)); //carry 선택
 
