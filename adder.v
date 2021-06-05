@@ -1,3 +1,24 @@
+//64bit Carry Select Adder
+module csa_64(sum, c_out, a, b, c_in);
+
+output [63:0] sum;
+output c_out ;
+
+input [63:0] a, b;
+input c_in;
+
+wire [3:0] c;
+
+csa_16 csa16_0 (.sum(sum[15:0]), .c_out(c[0]), .a(a[15:0]), .b(b[15:0]), .c_in(c_in));
+csa_16 csa16_1 (.sum(sum[31:16]), .c_out(c[1]), .a(a[31:16]), .b(b[31:16]), .c_in(c[0]));
+csa_16 csa16_2 (.sum(sum[47:32]), .c_out(c[2]), .a(a[47:32]), .b(b[47:32]), .c_in(c[1]));
+csa_16 csa16_3 (.sum(sum[63:48]), .c_out(c[3]), .a(a[63:48]), .b(b[63:48]), .c_in(c[2]));
+
+assign c_out = c[3];
+
+endmodule
+
+
 
 //16bit Carry Select Adder
 module csa_16(sum, c_out, a, b, c_in);
