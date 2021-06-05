@@ -1,3 +1,25 @@
+//16bit Carry Select Adder
+module csa_16(sum, c_out, a, b, c_in);
+
+output sum [15:0];
+output c_out ;
+
+input [15:0] a, b;
+input c_in;
+
+wire [3:0] c;
+
+csa_4 csa0 (.sum(s[3:0]), .c_out(c[0]), .a(a[3:0]), .b(b[3:0]), .c_in(c_in));
+csa_4 csa0 (.sum(s[7:4]), .c_out(c[1]), .a(a[7:4]), .b(b[7:4]), .c_in(c[0]));
+csa_4 csa0 (.sum(s[11:8]), .c_out(c[2]), .a(a[11:8]), .b(b[11:8]), .c_in(c[1]));
+csa_4 csa0 (.sum(s[15:12]), .c_out(c[3]), .a(a[15:12]), .b(b[15:12]), .c_in(c[2]));
+
+assign c_out = c[3];
+
+endmodule
+
+
+
 
 //4bit Carry Select Adder
 module csa_4(sum, c_out, a, b, c_in);
@@ -11,8 +33,8 @@ input c_in;
 wire [3:0] s0, s1;
 wire c0, c1; //중간에 저장되는 캐리 값, MUX선택할때 쓰임
 
-fulladd_4 fa0(.sum(s0[3:0]), .c_out(c0), .a(a), .b(b), .c_in(1'b0));
-fulladd_4 fa1(.sum(s1[3:0]), .c_out(c1), .a(a), .b(b), .c_in(1'b1));
+fulladd_4 fa0(.sum(s0[3:0]), .c_out(c0), .a(a), .b(b), .c_in(1'b0));// carry가 0일 때 4bit fa
+fulladd_4 fa1(.sum(s1[3:0]), .c_out(c1), .a(a), .b(b), .c_in(1'b1));// carry가 1일 때 4bit fa
 
 mux2_to_1 m0(.out(sum[0]), .i0(a[0]), .i1(b[0]), .s(c_in)); //c_in에 따라서 bit 선택
 mux2_to_1 m1(.out(sum[1]), .i0(a[1]), .i1(b[1]), .s(c_in));
