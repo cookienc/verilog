@@ -1,7 +1,8 @@
+
 //16bit Carry Select Adder
 module csa_16(sum, c_out, a, b, c_in);
 
-output sum [15:0];
+output [15:0] sum;
 output c_out ;
 
 input [15:0] a, b;
@@ -9,10 +10,10 @@ input c_in;
 
 wire [3:0] c;
 
-csa_4 csa0 (.sum(s[3:0]), .c_out(c[0]), .a(a[3:0]), .b(b[3:0]), .c_in(c_in));
-csa_4 csa0 (.sum(s[7:4]), .c_out(c[1]), .a(a[7:4]), .b(b[7:4]), .c_in(c[0]));
-csa_4 csa0 (.sum(s[11:8]), .c_out(c[2]), .a(a[11:8]), .b(b[11:8]), .c_in(c[1]));
-csa_4 csa0 (.sum(s[15:12]), .c_out(c[3]), .a(a[15:12]), .b(b[15:12]), .c_in(c[2]));
+csa_4 csa4_0 (.sum(sum[3:0]), .c_out(c[0]), .a(a[3:0]), .b(b[3:0]), .c_in(c_in));
+csa_4 csa4_1 (.sum(sum[7:4]), .c_out(c[1]), .a(a[7:4]), .b(b[7:4]), .c_in(c[0]));
+csa_4 csa4_2 (.sum(sum[11:8]), .c_out(c[2]), .a(a[11:8]), .b(b[11:8]), .c_in(c[1]));
+csa_4 csa4_3 (.sum(sum[15:12]), .c_out(c[3]), .a(a[15:12]), .b(b[15:12]), .c_in(c[2]));
 
 assign c_out = c[3];
 
