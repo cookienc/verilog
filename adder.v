@@ -1,61 +1,67 @@
 module stimulus;
-    reg clk;
-    reg [3:0] a, b;
+    
+    reg [63:0] a, b;
 	reg c_in;
-    wire [3:0] sum;
+    reg [64:0] final;
+    wire [63:0] sum;
 	wire c_out;
-    csa_4 csa_tb (sum, c_out, a, b, c_in);
+    csa_64 csa_tb (sum, c_out, a, b, c_in);
     
     initial
     begin
-    
-    clk = 0;
-    a=4'b0000; //0으로 초기화
-    b=4'b0000;
+    //Case 1 : 10 + 20 + 0 = 21
+    a = 64'd10;
+    b = 64'd20;
+    c_in = 1'b0;
+    #10 final = {c_out, sum[63:0]};
+
+    if(final == (a + b + c_in))
+    #5 $display("1st case success!! csa = %d, calculator = %d", final, (a + b + c_in));
+
+     //Case 2 : 123 + 521 + 1 = 645
+    a = 64'd123;
+    b = 64'd521;
+    c_in = 1'b1;
+    #10 final = {c_out, sum[63:0]};
+
+    if(final == (a + b + c_in))
+    #5 $display("2nd case success!! csa = %d, calculator = %d", final, (a + b + c_in));
+
+     //Case 3 : 7861 + 7865 + 0 = 15726
+    a = 64'd7861;
+    b = 64'd7865;
+    c_in = 1'b0;
+    #10 final = {c_out, sum[63:0]};
+
+    if(final == (a + b + c_in))
+    #5 $display("3rd case success!! csa = %d, calculator = %d", final, (a + b + c_in));
+
+     //Case 4 : 851378 + 4215 + 1 = 855594
+    a = 64'd851378;
+    b = 64'd4215;
+    c_in = 1'b1;
+    #10 final = {c_out, sum[63:0]};
+
+    if(final == (a + b + c_in))
+    #5 $display("4th case success!! csa = %d, calculator = %d", final, (a + b + c_in));
+
+     //Case 5 : 1358 + 241 + 0 = 1599
+    a = 64'd1358;
+    b = 64'd241;
+    c_in = 1'b0;
+    #10 final = {c_out, sum[63:0]};
+
+    if(final == (a + b + c_in))
+    #5 $display("5th success!! csa = %d, calculator = %d", final, (a + b + c_in));
+
+
     end
 
-    always  #10 clk= ~clk; // 클럭이 10마다 바뀜
-    integer i,j;
+    
+    
 
-    always@(posedge clk)
-    begin
-
-	assign c_in = 0;
-
-    for(i=0; i<16; i = i+1)
-		begin
-		#10 a=i;
-		for(j=0 ;j<i; j = j+1)
-			begin
-				#10 b=j;
-			end
-		$monitor("Sum = %b C_out = %b, Input A = %b, B = %b, c_in = %b", sum, c_out, a, b, c_in);
-		end
-	end
-
-	
-    always@(i) //i=16일때 반복을 멈춤
-        begin
-        if(i == 16)
-          begin
-          $finish;
-          end
-        end
 
  endmodule
-
-
-/*module stimulus;
-reg [63:0] a, b;
-reg 
-
-
-endmodule
-
-
-
-
-
 
 
 //64bit Carry Select Adder
@@ -100,7 +106,7 @@ assign c_out = c[3];
 
 endmodule
 
-*/
+
 
 
 //4bit Carry Select Adder
